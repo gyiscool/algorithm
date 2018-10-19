@@ -141,7 +141,7 @@ numNode *findByAddress(numNode *head,int address){
 		if(head->address == address && head->data != 0){
 			
 			next_head = createNode(head->address, head->data,head->nextAddress); 
-			
+			return next_head;
 			break;
 		} 
 		
@@ -149,7 +149,8 @@ numNode *findByAddress(numNode *head,int address){
 		
 	}
 	
-	return next_head;
+	return NULL;
+	
 }
 
 void sourcess(numNode *head){
@@ -183,7 +184,7 @@ void sourcess(numNode *head){
 
 //顺序化 头指针的位置 O(n^2)
 numNode *sourceNodes(numNode *head,int firstAddress){
-	numNode *newHead,*newList,*oldHead;
+	numNode *newHead,*newList,*oldHead,*newNode;
 	
 	oldHead = head;
 	newList = newHead = createHead();
@@ -192,8 +193,14 @@ numNode *sourceNodes(numNode *head,int firstAddress){
 	while(head != NULL){
 		
 		
-		newHead->link = findByAddress(oldHead,firstAddress);
+		newNode = findByAddress(oldHead,firstAddress);
 		
+		//如果没有找到  
+		if(newNode == NULL){
+				break; 
+		}
+		
+		newHead->link = newNode;
 		firstAddress = 	newHead->link->nextAddress;
 		
 		newHead = newHead->link;
@@ -320,14 +327,11 @@ int main(){
 	//2-1原始数据 顺序化
 	head = sourceNodes(oldHead,oldFirstAddress);
 	mfree(oldHead);
-	//system( "PAUSE ");
 	//2-2顺序化数据  反转处理 利用链表做堆栈处理 
 	newHeads = sloveNodes(head,oldFirstNum);
 	//mfree(head);
 		
 	//3-输出 
-	
-	
 	
 	/*printf("原始数据\n"); 
 	readNodes(oldHead);
